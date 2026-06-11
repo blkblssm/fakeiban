@@ -75,11 +75,12 @@ class AddressGenerator:
     def generate(self, country: str) -> AddressResult:
         cc = country.strip().upper()
         d = self.data.get(cc)
-        if d is None:
+        locations = d.get("locations") if d else None
+        if not locations:
             raise UnknownAddressCountryError(
                 f"Unknown or unsupported country code: {country}")
 
-        loc = random.choice(d["locations"])      # real city + region + postcode
+        loc = random.choice(locations)           # real city + region + postcode
         streets = d.get("streets", [])
         street_name = random.choice(streets) if streets else ""
         house = random.randint(1, 9999)

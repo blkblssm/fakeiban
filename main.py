@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from iban import IBANGenerator, UnknownCountryError
-from address import AddressGenerator, UnknownAddressCountryError
+from address import AddressGenerator
 
 CDN = "https://cdn.jsdelivr.net/gh/blkblssm/fakeiban@main"
 iban_generator = IBANGenerator(f"{CDN}/bank_data.json")
@@ -73,7 +73,7 @@ def address_for(country: str) -> dict | None:
         return None
     try:
         address = address_generator.generate(country).to_dict()
-    except UnknownAddressCountryError:
+    except Exception:
         return None
     address.pop("country_code", None)
     address.pop("country_name", None)
